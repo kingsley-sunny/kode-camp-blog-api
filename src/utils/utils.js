@@ -9,12 +9,16 @@ class Utils {
   }
 
   static createAccessToken(data) {
-    return jwt.sign(data, process.env.JWT_SECRET);
+    return jwt.sign(data, process.env.JWT_SECRET, { expiresIn: "2days" });
   }
 
   static comparePassword(password, hashedPassword) {
     const isValid = bcrypt.compare(password, hashedPassword);
     return isValid;
+  }
+
+  static verifyToken(token) {
+    return jwt.verify(token, process.env.JWT_SECRET);
   }
 }
 
