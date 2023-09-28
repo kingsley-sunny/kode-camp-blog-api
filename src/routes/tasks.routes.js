@@ -20,6 +20,14 @@ taskRoute.post(
   asyncWrapper(taskController.create)
 );
 
+taskRoute.patch(
+  "/:id",
+  authMiddleware.verifyToken,
+  taskValidator.validateEditTask(),
+  CustomValidateResult,
+  asyncWrapper(taskController.editTask)
+);
+
 taskRoute.get("/", authMiddleware.verifyToken, asyncWrapper(taskController.getAllTasks));
 
 module.exports = taskRoute;
