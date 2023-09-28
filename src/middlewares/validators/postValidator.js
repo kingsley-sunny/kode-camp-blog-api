@@ -1,10 +1,10 @@
 const { check } = require("express-validator");
 
-class TaskValidator {
+class PostValidator {
   #minimumTitleLength = 5;
   #minimumContentLength = 10;
 
-  validateCreateTask() {
+  validateCreatePost() {
     return [
       check("title", "Title must be at least 3 characters")
         .isLength({
@@ -23,7 +23,7 @@ class TaskValidator {
     ];
   }
 
-  validateEditTask() {
+  validateEditPost() {
     return [
       check("title", "Title must be at least 3 characters")
         .isLength({
@@ -45,4 +45,4 @@ class TaskValidator {
   }
 }
 
-module.exports = TaskValidator;
+module.exports = PostValidator;

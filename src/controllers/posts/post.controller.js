@@ -3,8 +3,9 @@ const database = require("../../database/database");
 const createSuccessResponse = require("../../helpers/customSuccessResponse");
 const CustomErrorApi = require("../../helpers/customErrorApi");
 const { StatusCodes } = require("http-status-codes");
+const { PAGE_LIMIT } = require("../../constants/constant");
 
-class TaskController {
+class PostController {
   async create(req, res) {
     const { title, image, content, tags } = req.body;
     const formattedSlug = slugify(title, {
@@ -12,19 +13,19 @@ class TaskController {
     });
 
     // check if the slug exists
-    let task = await database.post.findFirst({
+    let post = await database.post.findFirst({
       where: {
         slug: formattedSlug,
       },
     });
 
-    if (task) {
+    if (post) {
       return res.json({
         message: "Slug already exists, use a different Title or add a slug to it",
       });
     }
 
-    task = await database.post.create({
+    post = await database.post.create({
       data: {
         title,
         image,
@@ -35,25 +36,38 @@ class TaskController {
       },
     });
 
-    return res.json(createSuccessResponse(task, "Successfully Created Task"));
+    return res.json(createSuccessResponse(post, "Successfully Created Post"));
   }
 
-  async getAllTasks(req, res) {
-    let tasks = await database.post.findMany({
+  async getAllPosts(req, res) {
+    const nack = Array.from(new Set(req.query.tags));
+    console.log(nack);
+
+    let posts = await database.post.findMany({ take: PAGE_LIMIT });
+
+    return res.json(createSuccessResponse(posts, "Successful fetched Posts"));
+  }
+
+  async getSingePost(req, res) {
+    let post = await database.post.findFirst({
       where: {
-        authorId: req.user.id,
+        id: req.params.postId,
       },
     });
 
-    return res.json(createSuccessResponse(tasks, "Successful fetched Tasks"));
+    if (!post) {
+      throw new CustomErrorApi("Post not found", StatusCodes.NOT_FOUND);
+    }
+
+    return res.json(createSuccessResponse(post, "Successful fetched Post"));
   }
 
-  async editTask(req, res) {
+  async editPost(req, res) {
     let details = req.body;
 
-    const task = await database.post.update({
+    const post = await database.post.update({
       where: {
-        id: req.params.id,
+        id: req.params.postId,
         authorId: req.user.id,
       },
       data: {
@@ -64,8 +78,8 @@ class TaskController {
       },
     });
 
-    return res.json(createSuccessResponse(task, "Successfully Updated Task"));
+    return res.json(createSuccessResponse(post, "Successfully Updated Post"));
   }
 }
 
-module.exports = TaskController;
+module.exports = PostController;
