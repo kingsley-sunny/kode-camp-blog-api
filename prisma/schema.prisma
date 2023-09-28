@@ -14,8 +14,8 @@ model User {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   username String  @unique
   password String
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   posts   Post[]
 }
 
@@ -28,8 +28,8 @@ model Post {
   content  String 
   author   User      @relation(fields: [authorId], references: [id]) 
   authorId String    @db.ObjectId 
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 
