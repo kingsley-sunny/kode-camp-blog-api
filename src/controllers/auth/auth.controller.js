@@ -43,6 +43,23 @@ class AuthController {
 
     res.json(createSuccessResponse({ user, accessToken }, "Registration successful"));
   }
+
+  async getAuthenticatedUser(req, res) {
+    const { id } = req.user;
+
+    console.log(id);
+
+    const user = await database.user.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        posts: true,
+      },
+    });
+
+    return res.json(createSuccessResponse(user));
+  }
 }
 
 module.exports = AuthController;
