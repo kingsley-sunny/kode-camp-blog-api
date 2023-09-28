@@ -24,12 +24,25 @@ postRoute.patch(
   "/:postId",
   authMiddleware.verifyToken,
   postValidator.validateEditPost(),
+  postValidator.validatePostParams(),
   CustomValidateResult,
   asyncWrapper(postController.editPost)
 );
 
+postRoute.delete(
+  "/:postId",
+  authMiddleware.verifyToken,
+  postValidator.validatePostParams(),
+  CustomValidateResult,
+  asyncWrapper(postController.deletePost)
+);
+
 postRoute.get("/", asyncWrapper(postController.getAllPosts));
 
-postRoute.get("/:postId", asyncWrapper(postController.getSingePost));
+postRoute.get(
+  "/:postId",
+  postValidator.validatePostParams(),
+  asyncWrapper(postController.getSingePost)
+);
 
 module.exports = postRoute;

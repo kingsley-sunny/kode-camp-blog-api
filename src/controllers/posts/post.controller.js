@@ -80,6 +80,17 @@ class PostController {
 
     return res.json(createSuccessResponse(post, "Successfully Updated Post"));
   }
+
+  async deletePost(req, res) {
+    await database.post.delete({
+      where: {
+        id: req.params.postId,
+        authorId: req.user.id,
+      },
+    });
+
+    return res.json(createSuccessResponse({ data: 1 }, "Successfully Deleted Post"));
+  }
 }
 
 module.exports = PostController;

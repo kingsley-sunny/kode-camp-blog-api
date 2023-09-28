@@ -1,4 +1,4 @@
-const { check } = require("express-validator");
+const { check, param } = require("express-validator");
 
 class PostValidator {
   #minimumTitleLength = 5;
@@ -42,6 +42,10 @@ class PostValidator {
         .isLength({ min: this.#minimumContentLength })
         .optional(),
     ];
+  }
+
+  validatePostParams() {
+    return [param("postId", "Post ID is required").notEmpty()];
   }
 }
 
