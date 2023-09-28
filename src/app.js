@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const authRoute = require("./routes/auth.routes");
 const taskRoute = require("./routes/tasks.routes");
 const errorHandler = require("./middlewares/errorHandler");
+require("express-async-errors");
 
 const app = express();
 
