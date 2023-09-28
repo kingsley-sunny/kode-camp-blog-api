@@ -5,8 +5,22 @@ const CustomErrorApi = require("../../helpers/customErrorApi");
 const Utils = require("../../utils/utils");
 const asyncWrapper = require("../../middlewares/asyncWrapper");
 class AuthController {
-  login(req, res) {
-    res.json({ message: "Login successful" });
+  async login(req, res, next) {
+    let user = await database.user.findFirst({ where: { username: req.body.username } });
+
+    if (!user) {
+      return next(new CustomErrorApi("User not found", StatusCodes.NOT_FOUND));
+    }
+
+    const isPasswordValid = await Utils.comparePassword(req.body.password, user.password);
+
+    if (!isPasswordValid) {
+      return next(new CustomErrorApi("Invalid password", StatusCodes.UNAUTHORIZED));
+    }
+
+    const accessToken = Utils.createAccessToken({ id: user.id, username: user.username });
+
+    res.json(createSuccessResponse({ user, accessToken }, "Login successful"));
   }
 
   async register(req, res, next) {

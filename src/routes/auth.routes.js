@@ -12,8 +12,6 @@ const authValidator = new AuthValidator();
 // Login route
 authRoute.post("/login", asyncWrapper(authController.login));
 
-authController.getLogin;
-
 // Register route
 authRoute.post(
   "/register",

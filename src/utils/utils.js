@@ -11,6 +11,11 @@ class Utils {
   static createAccessToken(data) {
     return jwt.sign(data, process.env.JWT_SECRET);
   }
+
+  static comparePassword(password, hashedPassword) {
+    const isValid = bcrypt.compare(password, hashedPassword);
+    return isValid;
+  }
 }
 
 module.exports = Utils;
