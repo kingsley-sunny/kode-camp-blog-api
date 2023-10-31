@@ -41,6 +41,7 @@ postRoute.get("/", asyncWrapper(postController.getAllPosts));
 
 postRoute.get(
   "/:postId",
+  authMiddleware.verifyToken,
   postValidator.validatePostParams(),
   asyncWrapper(postController.getSingePost)
 );

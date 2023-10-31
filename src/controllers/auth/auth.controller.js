@@ -20,6 +20,8 @@ class AuthController {
 
     const accessToken = Utils.createAccessToken({ id: user.id, username: user.username });
 
+    delete user.password;
+
     res.json(createSuccessResponse({ user, accessToken }, "Login successful"));
   }
 
@@ -41,13 +43,13 @@ class AuthController {
 
     const accessToken = Utils.createAccessToken({ id: user.id, username: user.username });
 
+    delete user.password;
+
     res.json(createSuccessResponse({ user, accessToken }, "Registration successful"));
   }
 
   async getAuthenticatedUser(req, res) {
     const { id } = req.user;
-
-    console.log(id);
 
     const user = await database.user.findFirst({
       where: {
@@ -57,6 +59,8 @@ class AuthController {
         posts: true,
       },
     });
+
+    delete user.password;
 
     return res.json(createSuccessResponse(user));
   }

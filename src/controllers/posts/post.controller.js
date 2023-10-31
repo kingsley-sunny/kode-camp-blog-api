@@ -41,7 +41,6 @@ class PostController {
 
   async getAllPosts(req, res) {
     const nack = Array.from(new Set(req.query.tags));
-    console.log(nack);
 
     let posts = await database.post.findMany({ take: PAGE_LIMIT });
 
