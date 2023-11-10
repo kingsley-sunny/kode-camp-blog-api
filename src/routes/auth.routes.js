@@ -16,10 +16,10 @@ authRoute.post("/login", asyncWrapper(authController.login));
 
 // Register route
 authRoute.post(
-  "/register",
-  authValidator.validateRegistration(),
-  CustomValidateResult,
-  asyncWrapper(authController.register)
+    "/register",
+    authValidator.validateRegistration(),
+    CustomValidateResult,
+    asyncWrapper(authController.register)
 );
 
 // me Route

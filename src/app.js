@@ -16,13 +16,15 @@ app.use("/auth", authRoute);
 app.use("/posts", postRoute);
 
 app.use((req, res, next) => {
-  return next(new CustomErrorApi(`Route Not Found: ${req.originalUrl}`, StatusCodes.NOT_FOUND));
+    return next(new CustomErrorApi(`Route Not Found: ${req.originalUrl}`, StatusCodes.NOT_FOUND));
 });
 
 app.use(errorHandler);
 
+// eslint-disable-next-line no-undef
 app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+    // eslint-disable-next-line no-undef
+    console.log(`Server is running on port ${process.env.PORT}`);
 });
 
 module.exports = { app };

@@ -6,90 +6,89 @@ const { StatusCodes } = require("http-status-codes");
 const { PAGE_LIMIT } = require("../../constants/constant");
 
 class PostController {
-  async create(req, res) {
-    const { title, image, content, tags } = req.body;
-    const formattedSlug = slugify(title, {
-      lower: true,
-    });
+    async create(req, res) {
+        const { title, image, content, tags } = req.body;
+        const formattedSlug = slugify(title, {
+            lower: true,
+        });
 
-    // check if the slug exists
-    let post = await database.post.findFirst({
-      where: {
-        slug: formattedSlug,
-      },
-    });
+        // check if the slug exists
+        let post = await database.post.findFirst({
+            where: {
+                slug: formattedSlug,
+            },
+        });
 
-    if (post) {
-      return res.json({
-        message: "Slug already exists, use a different Title or add a slug to it",
-      });
+        if (post) {
+            return res.json({
+                message: "Slug already exists, use a different Title or add a slug to it",
+            });
+        }
+
+        post = await database.post.create({
+            data: {
+                title,
+                image,
+                content,
+                slug: formattedSlug,
+                authorId: req.user.id,
+                tags,
+            },
+        });
+
+        return res.json(createSuccessResponse(post, "Successfully Created Post"));
     }
 
-    post = await database.post.create({
-      data: {
-        title,
-        image,
-        content,
-        slug: formattedSlug,
-        authorId: req.user.id,
-        tags,
-      },
-    });
+    async getAllPosts(req, res) {
 
-    return res.json(createSuccessResponse(post, "Successfully Created Post"));
-  }
+        let posts = await database.post.findMany({ take: PAGE_LIMIT });
 
-  async getAllPosts(req, res) {
-    const nack = Array.from(new Set(req.query.tags));
-
-    let posts = await database.post.findMany({ take: PAGE_LIMIT });
-
-    return res.json(createSuccessResponse(posts, "Successful fetched Posts"));
-  }
-
-  async getSingePost(req, res) {
-    let post = await database.post.findFirst({
-      where: {
-        id: req.params.postId,
-      },
-    });
-
-    if (!post) {
-      throw new CustomErrorApi("Post not found", StatusCodes.NOT_FOUND);
+        return res.json(createSuccessResponse(posts, "Successful fetched Posts"));
     }
 
-    return res.json(createSuccessResponse(post, "Successful fetched Post"));
-  }
+    async getSingePost(req, res) {
+        let post = await database.post.findFirst({
+            where: {
+                id: req.params.postId,
+            },
+        });
 
-  async editPost(req, res) {
-    let details = req.body;
+        if (!post) {
+            throw new CustomErrorApi("Post not found", StatusCodes.NOT_FOUND);
+        }
 
-    const post = await database.post.update({
-      where: {
-        id: req.params.postId,
-        authorId: req.user.id,
-      },
-      data: {
-        title: details.title,
-        content: details.content,
-        image: details.image,
-        tags: details.tags,
-      },
-    });
+        return res.json(createSuccessResponse(post, "Successful fetched Post"));
+    }
 
-    return res.json(createSuccessResponse(post, "Successfully Updated Post"));
-  }
+    async editPost(req, res) {
+        let details = req.body;
 
-  async deletePost(req, res) {
-    await database.post.delete({
-      where: {
-        id: req.params.postId,
-        authorId: req.user.id,
-      },
-    });
+        const post = await database.post.update({
+            where: {
+                id: req.params.postId,
+                authorId: req.user.id,
+            },
+            data: {
+                title: details.title,
+                content: details.content,
+                image: details.image,
+                tags: details.tags,
+            },
+        });
 
-    return res.json(createSuccessResponse({ data: 1 }, "Successfully Deleted Post"));
-  }
+        return res.json(createSuccessResponse(post, "Successfully Updated Post"));
+    }
+
+    async deletePost(req, res) {
+        await database.post.delete({
+            where: {
+                id: req.params.postId,
+                authorId: req.user.id,
+            },
+        });
+
+        return res.json(createSuccessResponse({ data: 1 }, "Successfully Deleted Post"));
+    }
 }
 
 module.exports = PostController;
