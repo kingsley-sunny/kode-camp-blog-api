@@ -1,9 +1,10 @@
-const { PrismaClient } = require("@prisma/client");
+/* eslint-disable no-console */
+const { PrismaClient } = require('@prisma/client')
 
-const database = new PrismaClient();
+const database = new PrismaClient()
 
 database.$connect().then(() => {
-    console.log("Connected to database");
-});
+    console.log('Connected to database')
+})
 
-module.exports = database;
+module.exports = database

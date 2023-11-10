@@ -4,15 +4,15 @@
     "commonjs": true,
     "es2021": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "plugins": ["no-loops"],
   "parserOptions": {
     "ecmaVersion": "latest"
   },
   "rules": {
-    "indent": ["error", 4],
-    "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"],
-    "no-console": "warn"
+    "no-console": "warn",
+    "no-duplicate-imports": "error",
+    "no-loops/no-loops": "error"
+
   }
 }

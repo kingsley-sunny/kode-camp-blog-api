@@ -1,48 +1,48 @@
-const { Router } = require("express");
-const PostController = require("../controllers/posts/post.controller");
-const AuthMiddleware = require("../middlewares/auth/auth.middleware");
-const PostValidator = require("../middlewares/validators/postValidator");
-const CustomValidateResult = require("../middlewares/validators/validate");
-const asyncWrapper = require("../middlewares/asyncWrapper");
+const { Router } = require('express')
+const PostController = require('../controllers/posts/post.controller')
+const AuthMiddleware = require('../middlewares/auth/auth.middleware')
+const PostValidator = require('../middlewares/validators/postValidator')
+const CustomValidateResult = require('../middlewares/validators/validate')
+const asyncWrapper = require('../middlewares/asyncWrapper')
 
-const postRoute = Router();
+const postRoute = Router()
 
-const postController = new PostController();
-const authMiddleware = new AuthMiddleware();
-const postValidator = new PostValidator();
+const postController = new PostController()
+const authMiddleware = new AuthMiddleware()
+const postValidator = new PostValidator()
 
 postRoute.post(
-    "/",
+    '/',
     authMiddleware.verifyToken,
     postValidator.validateCreatePost(),
     CustomValidateResult,
-    asyncWrapper(postController.create)
-);
+    asyncWrapper(postController.create),
+)
 
 postRoute.patch(
-    "/:postId",
+    '/:postId',
     authMiddleware.verifyToken,
     postValidator.validateEditPost(),
     postValidator.validatePostParams(),
     CustomValidateResult,
-    asyncWrapper(postController.editPost)
-);
+    asyncWrapper(postController.editPost),
+)
 
 postRoute.delete(
-    "/:postId",
+    '/:postId',
     authMiddleware.verifyToken,
     postValidator.validatePostParams(),
     CustomValidateResult,
-    asyncWrapper(postController.deletePost)
-);
+    asyncWrapper(postController.deletePost),
+)
 
-postRoute.get("/", asyncWrapper(postController.getAllPosts));
+postRoute.get('/', asyncWrapper(postController.getAllPosts))
 
 postRoute.get(
-    "/:postId",
+    '/:postId',
     authMiddleware.verifyToken,
     postValidator.validatePostParams(),
-    asyncWrapper(postController.getSingePost)
-);
+    asyncWrapper(postController.getSingePost),
+)
 
-module.exports = postRoute;
+module.exports = postRoute

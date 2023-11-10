@@ -1,3 +1,3 @@
-const PAGE_LIMIT = 10;
+const PAGE_LIMIT = 10
 
-module.exports = { PAGE_LIMIT };
+module.exports = { PAGE_LIMIT }
