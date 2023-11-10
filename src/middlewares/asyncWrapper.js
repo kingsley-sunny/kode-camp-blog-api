@@ -3,6 +3,7 @@ function asyncWrapper(fn) {
         try {
             await fn(req, res, next);
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.log(error.message);
             next(error);
         }

@@ -23,7 +23,7 @@ app.use(errorHandler);
 
 // eslint-disable-next-line no-undef
 app.listen(process.env.PORT, () => {
-    // eslint-disable-next-line no-undef
+    // eslint-disable-next-line no-undef, no-console
     console.log(`Server is running on port ${process.env.PORT}`);
 });
 
